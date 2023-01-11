@@ -1,35 +1,22 @@
 let express = require('express');
 let app = express();
-let path = require("path")
 let passport = require('passport')
-let session = require('express-session')
-let env = require('dotenv').config();
-let models = require("./app/models");
 let exphbs = require('express-handlebars')
-app.use(express.urlencoded({
-    extended: true
-})
-);
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// For Passport
-app.use(session({
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true
-})); // session secret
-
 app.use(passport.initialize());
 
-app.use(passport.session()); // persistent login sessions
-//STYLING
-app.use(express.static(path.join(__dirname, '/app/public')));
+let session = require('express-session')
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }))
+app.use(passport.session());
 
+// index
 app.get('/', function (req, res) {
     res.redirect("/dashboard");
 });
 
-//For Handlebars
+// handlebars
 app.set('views', './app/views');
 app.engine('hbs', exphbs.engine({
     extname: '.hbs',
@@ -38,23 +25,14 @@ app.engine('hbs', exphbs.engine({
 }));
 app.set('view engine', '.hbs');
 
-require('./app/config/passport/passport.js')(passport, models.user);
+// oauth2
+require('./app/config/passport/passport.js')(passport);
+require('./app/routes/auth.js')(app, passport);
 
-//Sync Database
-models.sequelize.sync()
-    .then(function () {
-        console.log('Nice! Database looks fine')
-    }).catch(function (err) {
-        console.log(err, "Something went wrong with the Database Update!")
-});
-
-//Routes
-let authRoute = require('./app/routes/auth.js')(app,passport);
-
-app.listen(5000, function (err) {
-    if (!err){
-        console.log("Site is live http://localhost:5000");
-    }else{
-         console.log(err);
+app.listen(8081, function (err) {
+    if (!err) {
+        console.log("Site is live http://localhost:8081");
+    } else {
+        console.log(err);
     }
 });

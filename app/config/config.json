@@ -1,0 +1,15 @@
+{
+  "development": {
+    "oauth2": {
+      "authorizationURL": "http://localhost:8080/realms/master/protocol/openid-connect/auth",
+      "tokenURL": "http://localhost:8080/realms/master/protocol/openid-connect/token",
+      "userProfileURL": "http://localhost:8080/realms/master/protocol/openid-connect/userinfo",
+      "logoutURL": "http://localhost:8080/realms/master/protocol/openid-connect/logout",
+      "clientID": "graphxr",
+      "clientSecret": "OZnucBsKXp5EzD03rPeqsjUWm3VeJa0I",
+      "scope": "profile,openid,email",
+      "callbackURL": "http://localhost:8081/oauth2/login/callback",
+      "logoutCallbackURL": "http://localhost:8081/oauth2/logout"
+    }
+  }
+}
